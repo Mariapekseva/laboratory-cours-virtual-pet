@@ -1,4 +1,4 @@
-п»ї#include "MagicalPet.h"
+#include "MagicalPet.h"
 #include <iostream>
 
 MagicalPet::MagicalPet(std::string name, std::string type, int age, std::string magicType)
@@ -6,18 +6,17 @@ MagicalPet::MagicalPet(std::string name, std::string type, int age, std::string 
 }
 
 void MagicalPet::showStatus() const {
-    
     VirtualPet::showStatus();
-    std::cout << "[РњР°РіРёСЏ: " << magicType << "]\n";
+    std::cout << "[Магия: " << magicType << "]\n";
 }
 
 void MagicalPet::specialAbility() {
-    
-    std::cout << name << " СЃРѕС‚РІРѕСЂРёР» " << magicType << "-РёР»Р»СЋР·РёСЋ!\n";
+    std::cout << getName() << " сотворил " << magicType << "-иллюзию!\n";
 }
 
 std::unique_ptr<PetBase> MagicalPet::clone() const {
-    auto copy = std::make_unique<MagicalPet>(name, type, age, magicType);
-    copy->getParameters() = getParameters(); // РєРѕРїРёСЂСѓРµРј РїР°СЂР°РјРµС‚СЂС‹
+    auto copy = std::make_unique<MagicalPet>(getName(), getType(), getAge(), magicType);
+    copy->getParameters() = getParameters();
+    copy->addXP(0); // чтобы не сбросился XP
     return copy;
 }
