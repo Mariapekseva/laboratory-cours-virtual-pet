@@ -1,53 +1,39 @@
-﻿// FoxPet.cs
-using System;
-using System.Collections.Generic;
+﻿using System;
 
-public class FoxPet : VirtualPet, IPlayable, ISavable
+public class FoxPet : MagicalPet
 {
-    public FoxPet(string name, int age)
-        : base(name, "Девятихвостый лис", age)
+    private int illusionUses;
+    private bool eternalLifeUsed;
+
+    public FoxPet(string name, string type, int age)
+        : base(name, type, age, "Иллюзия")
     {
+        illusionUses = 3;
+        eternalLifeUsed = false;
     }
 
-    public override void MakeSound()
+    public override void SpecialAbility()
     {
-        Console.WriteLine($"{Name} тихо смеётся: 'Хи-хи-хи...'");
-    }
-
-    public override void UseSpecialAbility()
-    {
-        Console.WriteLine($"{Name} создаёт иллюзию — вы получаете +25 к настроению!");
-        Parameters.SetMood(Math.Min(100, Parameters.Mood + 25));
-        Update();
-    }
-
-    public override void Greet()
-    {
-        base.Greet();
-        Console.WriteLine($"{Name} кланяется изящно, хвосты мерцают.");
-    }
-
-    public void PlayMiniGame()
-    {
-        Console.WriteLine($"{Name} предлагает загадку древнего лиса!");
-        var game = new MiniGame("Загадки Лиса", 1, new Dictionary<string, int>
+        if (illusionUses > 0)
         {
-            ["mood"] = 30
-        });
-        game.StartGame();
-        game.ApplyEffects(Parameters);
-        Update();
+            Console.WriteLine($"{GetName()} создаёт ИЛЛЮЗИЮ!");
+            Console.WriteLine("   Враги запутались, можно убежать!");
+            illusionUses--;
+            Console.WriteLine($"   Осталось использований: {illusionUses}");
+        }
+        else
+        {
+            Console.WriteLine($"{GetName()} слишком устал для иллюзий.");
+        }
     }
 
-    public bool Save(string path)
+    public override void LevelUp()
     {
-        var saver = new SaveSystem(path, false);
-        return saver.SaveGame(this);
-    }
-
-    public bool Load(string path)
-    {
-        var saver = new SaveSystem(path, false);
-        return saver.LoadGame(out VirtualPet loaded);
+        base.LevelUp();
+        if (GetLevel() >= 3)
+        {
+            illusionUses = 3;
+            Console.WriteLine($"{GetName()} восстановил иллюзии!");
+        }
     }
 }

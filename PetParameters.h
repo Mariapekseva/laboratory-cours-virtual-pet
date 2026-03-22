@@ -5,22 +5,28 @@
 class PetParameters {
 private:
     int hunger = 50;
-    int fatigue = 50;
+    int fatigue = 0;
     int health = 100;
-    int mood = 50;
+    int mood = 70;
 
 public:
-    void updateOverTime();
-    bool checkCriticalLevels() const;
-    std::map<std::string, int> getParameters() const;
-
+    // Геттеры
     int getHunger() const;
     int getFatigue() const;
     int getHealth() const;
     int getMood() const;
+    int getEnergy() const;  // Новый метод
 
-    void setHunger(int value);
-    void setFatigue(int value);
-    void setHealth(int value);
-    void setMood(int value);
+    // Сеттеры
+    void setHunger(int v);
+    void setFatigue(int v);
+    void setHealth(int v);
+    void setMood(int v);
+
+    // Обновление и проверки
+    void updateOverTime();
+    bool checkCriticalLevels() const;
+
+    // Для совместимости
+    std::map<std::string, int> getParameters() const;
 };

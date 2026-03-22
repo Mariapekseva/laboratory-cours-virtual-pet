@@ -17,6 +17,6 @@ void MagicalPet::specialAbility() {
 std::unique_ptr<PetBase> MagicalPet::clone() const {
     auto copy = std::make_unique<MagicalPet>(getName(), getType(), getAge(), magicType);
     copy->getParameters() = getParameters();
-    copy->addXP(0); // чтобы не сбросился XP
+    copy->addXP(0);
     return copy;
 }

@@ -5,7 +5,8 @@
 struct Achievement {
     std::string name;
     std::string description;
-    bool unlocked = false;
+    std::string requirement;
+    bool unlocked;
 };
 
 class AchievementSystem {
@@ -14,6 +15,7 @@ private:
 
 public:
     AchievementSystem();
-    void checkAchievements(int level, int interactions);
+    void checkAchievements(int level, int interactions, int gamesWon);
     void displayAchievements() const;
+    void unlockAchievement(const std::string& name);
 };

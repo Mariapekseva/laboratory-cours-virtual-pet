@@ -6,23 +6,27 @@ DragonPet::DragonPet(std::string name, std::string type, int age)
 }
 
 void DragonPet::specialAbility() {
-    std::cout << getName() << " извергает огонь: 'PPP-ОГНЬ!'\n";
+    if (fireBreathUses > 0) {
+        std::cout << getName() << " использует ОГНЕННОЕ ДЫХАНИЕ!\n";
+        std::cout << "   Враги получают урон, настроение повышается!\n";
+        fireBreathUses--;
+        std::cout << "   Осталось использований: " << fireBreathUses << "\n";
+    }
+    else {
+        std::cout << getName() << " слишком устал для огненного дыхания.\n";
+        std::cout << "   Отдохните и попробуйте позже!\n";
+    }
 }
 
 void DragonPet::levelUp() {
-    MagicalPet::levelUp();
-    int newLevel = getXP() / 100;
-    if (newLevel == 3) {
-        std::cout << getName() << " получил способность 'Огненное дыхание'!\n";
-    }
-    else if (newLevel == 5) {
-        std::cout << getName() << " получил способность 'Драконья броня'!\n";
-        armorActive = true;
-    }
-    else if (newLevel == 10 && !ancientRageUsed) {
-        std::cout << getName() << " получил способность 'Древняя ярость'!\n";
-        getParameters().setHealth(getParameters().getHealth() + 50);
-        getParameters().setMood(getParameters().getMood() + 50);
-        ancientRageUsed = true;
+    VirtualPet::levelUp();  // Вызываем базовый метод
+
+    // ИСПРАВЛЕНО: используем геттер вместо прямого доступа
+    int currentLevel = getXP() / 100;
+    if (currentLevel >= 5 && !ancientPowerUnlocked) {
+        ancientPowerUnlocked = true;
+        fireBreathUses = 5;
+        std::cout << getName() << " получил ДРЕВНЮЮ СИЛУ!\n";
+        std::cout << "   Огненное дыхание стало мощнее!\n";
     }
 }

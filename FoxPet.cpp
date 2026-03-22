@@ -2,29 +2,28 @@
 #include <iostream>
 
 FoxPet::FoxPet(std::string name, std::string type, int age)
-    : MagicalPet(name, type, age, "Иллюзии") {
+    : MagicalPet(name, type, age, "Иллюзия") {
 }
 
 void FoxPet::specialAbility() {
-    std::cout << getName() << " создаёт иллюзию — вы получаете +25 к настроению!\n";
-    getParameters().setMood(getParameters().getMood() + 25);
-    update();
+    if (illusionUses > 0) {
+        std::cout << getName() << " создаёт ИЛЛЮЗИЮ!\n";
+        std::cout << "   Враги запутались, можно убежать!\n";
+        illusionUses--;
+        std::cout << "   Осталось использований: " << illusionUses << "\n";
+    }
+    else {
+        std::cout << getName() << " слишком устал для иллюзий.\n";
+    }
 }
 
 void FoxPet::levelUp() {
-    MagicalPet::levelUp();
-    int newLevel = getXP() / 100;
-    if (newLevel == 3) {
-        std::cout << getName() << " получил способность 'Иллюзия'!\n";
-        illusionUses = 1;
-    }
-    else if (newLevel == 5) {
-        std::cout << getName() << " получил способность 'Танец луны'!\n";
-        getParameters().setHealth(getParameters().getHealth() + 20);
-        getParameters().setMood(getParameters().getMood() + 20);
-    }
-    else if (newLevel == 10 && !eternalLifeUsed) {
-        std::cout << getName() << " получил способность 'Вечная жизнь'!\n";
-        eternalLifeUsed = true;
+    VirtualPet::levelUp();  // Вызываем базовый метод
+
+    // ИСПРАВЛЕНО: используем геттер вместо прямого доступа
+    int currentLevel = getXP() / 100;
+    if (currentLevel >= 3) {
+        illusionUses = 3;
+        std::cout << getName() << " восстановил иллюзии!\n";
     }
 }
