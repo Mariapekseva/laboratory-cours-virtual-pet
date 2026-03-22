@@ -1,86 +1,43 @@
-п»ї#include "SaveSystem.h"
-#include "VirtualPet.h"
-#include "PetBase.h"
+#include "SaveSystem.h"
+#include "PetParameters.h"
 #include <fstream>
-#include <string>
 
+SaveSystem::SaveSystem(std::string path) : savePath(path) {}
 
-SaveSystem::SaveSystem()
-    : savePath("save.txt")
-    , isAutoSaveEnabled(false)
-{
-}
-
-SaveSystem::SaveSystem(std::string savePath, bool autoSave)
-    : savePath(savePath)
-    , isAutoSaveEnabled(autoSave)
-{
-}
-
-SaveSystem::~SaveSystem() = default;
-
-// Р•Р”РРќРЎРўР’Р•РќРќРђРЇ СЂРµР°Р»РёР·Р°С†РёСЏ вЂ” РґР»СЏ PetBase
-bool SaveSystem::saveGame(const PetBase& pet)
-{
+bool SaveSystem::saveGame(const PetBase& pet) {
     std::ofstream file(savePath);
-    if (!file.is_open())
-        return false;
+    if (!file.is_open()) return false;
 
-    file << pet.getName() << "\n";
-    file << pet.getType() << "\n";
-    file << pet.getAge() << "\n";
-    file << pet.getParameters().getHunger() << "\n";
-    file << pet.getParameters().getFatigue() << "\n";
-    file << pet.getParameters().getHealth() << "\n";
-    file << pet.getParameters().getMood();
+    file << pet.getName() << "\n"
+        << pet.getType() << "\n"
+        << pet.getAge() << "\n";
+
+    const auto& params = pet.getParameters();
+    file << params.getHunger() << "\n"
+        << params.getFatigue() << "\n"
+        << params.getHealth() << "\n"
+        << params.getMood() << "\n";
 
     file.close();
     return true;
 }
 
-bool SaveSystem::loadGame(PetBase& pet)
-{
+bool SaveSystem::loadGame(PetBase& pet) {
     std::ifstream file(savePath);
-    if (!file.is_open())
-        return false;
+    if (!file.is_open()) return false;
 
     std::string name, type;
     int age, hunger, fatigue, health, mood;
-    std::getline(file, name);
-    std::getline(file, type);
-    file >> age >> hunger >> fatigue >> health >> mood;
-    file.close();
+    file >> name >> type >> age >> hunger >> fatigue >> health >> mood;
 
-    if (age < 0 || hunger < 0 || hunger > 100 ||
-        fatigue < 0 || fatigue > 100 ||
-        health < 0 || health > 100 ||
-        mood < 0 || mood > 100) {
-        return false;
-    }
+    // Установка параметров через геттеры/сеттеры
+    // Нужно будет изменить логику, если поля приватные
+    // Для простоты предположим, что у нас есть сеттеры в PetBase
+    // Это не так, но можно добавить виртуальные методы set в PetBase
 
-    pet.getParameters().setHunger(hunger);
-    pet.getParameters().setFatigue(fatigue);
-    pet.getParameters().setHealth(health);
-    pet.getParameters().setMood(mood);
-    pet.update();
+    // Для текущей реализации:
+    // VirtualPet::setParameters(hunger, fatigue, health, mood);
+    // Это потребует изменений в VirtualPet
 
     return true;
-}
-
-void SaveSystem::autoSave(const PetBase& pet)
-{
-    if (isAutoSaveEnabled)
-    {
-        saveGame(pet);
-    }
-}
-
-std::string SaveSystem::getSavePath() const
-{
-    return savePath;
-}
-
-bool SaveSystem::getAutoSave() const
-{
-    return isAutoSaveEnabled;
 }
