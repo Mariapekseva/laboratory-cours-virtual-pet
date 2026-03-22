@@ -14,19 +14,11 @@ void PetState::determineState(int hunger, int fatigue, int health) {
     else if (fatigue > 70) {
         stateName = "Уставшее";
         description = "Питомец устал и хочет спать.";
-        availableActions = { "Положить спать" };
+        availableActions = { "Уложить спать" };
     }
     else {
         stateName = "Активное";
         description = "Питомец бодр и готов к взаимодействию";
-        availableActions = { "Покормить", "Поиграть", "Положить спать" };
+        availableActions = { "Покормить", "Поиграть", "Уложить спать" };
     }
-}
-
-std::string PetState::getVisualization() const {
-    return description;
-}
-
-std::vector<std::string> PetState::getAvailableActions() const {
-    return availableActions;
 }

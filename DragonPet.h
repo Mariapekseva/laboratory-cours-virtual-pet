@@ -10,6 +10,6 @@ public:
     void levelUp() override;
 
 private:
-    bool armorActive = false;
-    bool ancientRageUsed = false;
+    int fireBreathUses = 3;
+    bool ancientPowerUnlocked = false;
 };

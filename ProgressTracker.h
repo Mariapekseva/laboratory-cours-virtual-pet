@@ -1,14 +1,27 @@
 #pragma once
+#include <string>
+#include <iostream>
+#include <iomanip>
 
 class ProgressTracker {
 private:
-    int interactionCount = 0;
-    int xpGained = 0;
+    int totalInteractions;
+    int totalGamesPlayed;
+    int totalGamesWon;
+    int totalXP;
+    int highestLevel;
 
 public:
-    void trackInteraction();
-    void addXP(int amount);
+    ProgressTracker();
 
-    int getInteractionCount() const { return interactionCount; }
-    int getXPGained() const { return xpGained; }
+    void trackInteraction();
+    void trackGame(bool won);
+    void updateXP(int xp);
+    void updateLevel(int level);
+
+    void displayProgress() const;
+    void reset();
+
+    int getInteractionCount() const { return totalInteractions; }
+    int getGamesWon() const { return totalGamesWon; }
 };

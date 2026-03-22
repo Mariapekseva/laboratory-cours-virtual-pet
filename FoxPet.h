@@ -10,6 +10,6 @@ public:
     void levelUp() override;
 
 private:
-    int illusionUses = 1;
+    int illusionUses = 3;
     bool eternalLifeUsed = false;
 };

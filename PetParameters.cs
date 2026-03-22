@@ -1,39 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 
 public class PetParameters
 {
-    private int hunger, fatigue, health, mood;
+    private int hunger;
+    private int fatigue;
+    private int health;
+    private int mood;
 
-    public int Hunger => hunger;
-    public int Fatigue => fatigue;
-    public int Health => health;
-    public int Mood => mood;
-
-    public PetParameters(int hunger = 50, int fatigue = 50, int health = 100, int mood = 50)
+    public PetParameters()
     {
-        SetHunger(hunger);
-        SetFatigue(fatigue);
-        SetHealth(health);
-        SetMood(mood);
+        hunger = 50;
+        fatigue = 0;
+        health = 100;
+        mood = 70;
     }
+
+    public int GetHunger() => hunger;
+    public int GetFatigue() => fatigue;
+    public int GetHealth() => health;
+    public int GetMood() => mood;
+    public int GetEnergy() => 100 - fatigue;
+
+    public void SetHunger(int value) => hunger = Math.Max(0, Math.Min(100, value));
+    public void SetFatigue(int value) => fatigue = Math.Max(0, Math.Min(100, value));
+    public void SetHealth(int value) => health = Math.Max(0, Math.Min(100, value));
+    public void SetMood(int value) => mood = Math.Max(0, Math.Min(100, value));
 
     public void UpdateOverTime()
     {
-        hunger += 10;
-        fatigue += 5;
-        if (hunger > 75) health -= 5;
-        if (fatigue > 70) mood -= 10;
+        SetHunger(GetHunger() + 5);
+        SetFatigue(GetFatigue() + 3);
+
+        if (GetHunger() > 75)
+            SetHealth(GetHealth() - 3);
+
+        if (GetFatigue() > 70)
+            SetMood(GetMood() - 5);
+
+        if (GetHealth() < 30)
+            SetMood(GetMood() - 5);
     }
 
-    public bool CheckCriticalLevels() => health <= 20;
-
-    public Dictionary<string, int> GetParameters() =>
-        new() { ["hunger"] = hunger, ["fatigue"] = fatigue, ["health"] = health, ["mood"] = mood };
-
-    public void SetHunger(int value) => hunger = Math.Clamp(value, 0, 100);
-    public void SetFatigue(int value) => fatigue = Math.Clamp(value, 0, 100);
-    public void SetHealth(int value) => health = Math.Clamp(value, 0, 100);
-    public void SetMood(int value) => mood = Math.Clamp(value, 0, 100);
+    public bool CheckCriticalLevels()
+    {
+        return health <= 20 || hunger >= 90 || fatigue >= 90;
+    }
 }
-

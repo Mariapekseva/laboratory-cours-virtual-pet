@@ -1,9 +1,10 @@
+
 #pragma once
 #include "PetBase.h"
 #include <vector>
 #include <memory>
-#include <type_traits>
 #include <algorithm>
+#include <type_traits>
 
 template<typename T>
 class PetContainer {
@@ -18,9 +19,8 @@ public:
     }
 
     void sortByAge() {
-        std::sort(pets.begin(), pets.end(), [](const auto& a, const auto& b) {
-            return a->getAge() < b->getAge();
-            });
+        std::sort(pets.begin(), pets.end(),
+            [](const auto& a, const auto& b) { return a->getAge() < b->getAge(); });
     }
 
     template<typename Predicate>
@@ -43,4 +43,5 @@ public:
     }
 };
 
+// явна€ инстанциаци€ дл€ MagicalPet
 template class PetContainer<MagicalPet>;

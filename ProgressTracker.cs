@@ -1,56 +1,66 @@
 ﻿using System;
-using System.Text;
 
 public class ProgressTracker
 {
-    private int petLifetime;
-    private int interactionCount;
-    private int totalPlayTime;
-    private double parameterBalance;
+    private int totalInteractions;
+    private int totalGamesPlayed;
+    private int totalGamesWon;
+    private int totalXP;
+    private int highestLevel;
 
     public ProgressTracker()
     {
-        petLifetime = 0;
-        interactionCount = 0;
-        totalPlayTime = 0;
-        parameterBalance = 0.0;
+        totalInteractions = 0;
+        totalGamesPlayed = 0;
+        totalGamesWon = 0;
+        totalXP = 0;
+        highestLevel = 1;
     }
 
-    public void UpdateStats(int petLifetime, int interactionCount, int totalPlayTime, double parameterBalance)
+    public void TrackInteraction() => totalInteractions++;
+
+    public void TrackGame(bool won)
     {
-        this.petLifetime = petLifetime;
-        this.interactionCount = interactionCount;
-        this.totalPlayTime = totalPlayTime;
-        this.parameterBalance = parameterBalance;
+        totalGamesPlayed++;
+        if (won) totalGamesWon++;
     }
 
-    public string GenerateReport()
+    public void UpdateXP(int xp) => totalXP = xp;
+
+    public void UpdateLevel(int level)
     {
-        var report = new StringBuilder();
-        report.AppendLine("\n=== Отчёт о прогрессе ===");
-        report.AppendLine($"Время жизни питомца: {petLifetime} дней");
-        report.AppendLine($"Количество взаимодействий: {interactionCount}");
-        report.AppendLine($"Общее время игры: {totalPlayTime} минут");
-        report.AppendLine($"Средний баланс параметров: {parameterBalance:F1}%");
-        report.AppendLine("========================");
-        return report.ToString();
+        if (level > highestLevel) highestLevel = level;
     }
 
-    public void TrackInteraction()
+    public void DisplayProgress()
     {
-        interactionCount++;
+        Console.WriteLine("\n╔══════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                  ПРОГРЕСС ИГРОКА                         ║");
+        Console.WriteLine("╠══════════════════════════════════════════════════════════╣");
+        Console.WriteLine($"║  Всего взаимодействий: {totalInteractions,5}                             ");
+        Console.WriteLine($"║  Сыграно игр:          {totalGamesPlayed,5}                             ");
+        Console.WriteLine($"║  Выиграно игр:         {totalGamesWon,5}                             ");
+        Console.WriteLine($"║  Всего опыта:          {totalXP,5}                             ");
+        Console.WriteLine($"║  Максимальный уровень: {highestLevel,5}                             ");
+
+        if (totalGamesPlayed > 0)
+        {
+            int winRate = totalGamesWon * 100 / totalGamesPlayed;
+            Console.WriteLine($"║  Процент побед:        {winRate,3}%                                ");
+        }
+
+        Console.WriteLine("╚══════════════════════════════════════════════════════════╝");
     }
 
-    public int GetPetLifetime() => petLifetime;
-    public int GetInteractionCount() => interactionCount;
-    public int GetTotalPlayTime() => totalPlayTime;
-    public double GetParameterBalance() => parameterBalance;
+    public int GetInteractionCount() => totalInteractions;
+    public int GetGamesWon() => totalGamesWon;
+
+    public void Reset()
+    {
+        totalInteractions = 0;
+        totalGamesPlayed = 0;
+        totalGamesWon = 0;
+        totalXP = 0;
+        highestLevel = 1;
+    }
 }
-
-
-
-
-
-
-
-

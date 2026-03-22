@@ -1,8 +1,5 @@
 #include "SaveSystem.h"
-#include "PetParameters.h"
-#include <fstream>
-
-SaveSystem::SaveSystem(std::string path) : savePath(path) {}
+#include <iostream>
 
 bool SaveSystem::saveGame(const PetBase& pet) {
     std::ofstream file(savePath);
@@ -28,16 +25,22 @@ bool SaveSystem::loadGame(PetBase& pet) {
 
     std::string name, type;
     int age, hunger, fatigue, health, mood;
-    file >> name >> type >> age >> hunger >> fatigue >> health >> mood;
 
-    // Установка параметров через геттеры/сеттеры
-    // Нужно будет изменить логику, если поля приватные
-    // Для простоты предположим, что у нас есть сеттеры в PetBase
-    // Это не так, но можно добавить виртуальные методы set в PetBase
+    if (!(file >> name >> type >> age >> hunger >> fatigue >> health >> mood)) {
+        return false;
+    }
 
-    // Для текущей реализации:
-    // VirtualPet::setParameters(hunger, fatigue, health, mood);
-    // Это потребует изменений в VirtualPet
+    pet.setName(name);
+    pet.setType(type);
+    pet.setAge(age);
+
+    auto& p = pet.getParameters();
+    p.setHunger(hunger);
+    p.setFatigue(fatigue);
+    p.setHealth(health);
+    p.setMood(mood);
+
+    pet.update();
 
     return true;
 }

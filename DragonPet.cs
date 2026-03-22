@@ -1,54 +1,42 @@
-﻿// DragonPet.cs
-using System;
-using System.Collections.Generic;
+﻿using System;
 
-public class DragonPet : VirtualPet, IPlayable, ISavable
+public class DragonPet : MagicalPet
 {
-    public DragonPet(string name, int age)
-        : base(name, "Дракон", age)
+    private int fireBreathUses;
+    private bool ancientPowerUnlocked;
+
+    public DragonPet(string name, string type, int age)
+        : base(name, type, age, "Огонь")
     {
+        fireBreathUses = 3;
+        ancientPowerUnlocked = false;
     }
 
-    public override void MakeSound()
+    public override void SpecialAbility()
     {
-        Console.WriteLine($"{Name} рычит и извергает огонь: 'РРР-ОГНЬ!'");
-    }
-
-    public override void UseSpecialAbility()
-    {
-        Console.WriteLine($"{Name} окутывает вас защитным пламенем!");
-        Parameters.SetHealth(Math.Min(100, Parameters.Health + 20));
-        Parameters.SetMood(Math.Min(100, Parameters.Mood + 10));
-        Update();
-    }
-
-    public override void Greet()
-    {
-        Console.WriteLine($"{Name} машет крыльями и поднимает ветер!");
-    }
-
-    public void PlayMiniGame()
-    {
-        Console.WriteLine($"{Name} предлагает испытание огнём!");
-        var game = new MiniGame("Испытание Дракона", 2, new Dictionary<string, int>
+        if (fireBreathUses > 0)
         {
-            ["mood"] = 20,
-            ["health"] = 10
-        });
-        game.StartGame();
-        game.ApplyEffects(Parameters);
-        Update();
+            Console.WriteLine($"{GetName()} использует ОГНЕННОЕ ДЫХАНИЕ!");
+            Console.WriteLine("   Враги получают урон, настроение повышается!");
+            fireBreathUses--;
+            Console.WriteLine($"   Осталось использований: {fireBreathUses}");
+        }
+        else
+        {
+            Console.WriteLine($"{GetName()} слишком устал для огненного дыхания.");
+            Console.WriteLine("   Отдохните и попробуйте позже!");
+        }
     }
 
-    public bool Save(string path)
+    public override void LevelUp()
     {
-        var saver = new SaveSystem(path, false);
-        return saver.SaveGame(this);
-    }
-
-    public bool Load(string path)
-    {
-        var saver = new SaveSystem(path, false);
-        return saver.LoadGame(out VirtualPet loaded);
+        base.LevelUp();
+        if (GetLevel() >= 5 && !ancientPowerUnlocked)
+        {
+            ancientPowerUnlocked = true;
+            fireBreathUses = 5;
+            Console.WriteLine($"{GetName()} получил ДРЕВНЮЮ СИЛУ!");
+            Console.WriteLine("   Огненное дыхание стало мощнее!");
+        }
     }
 }
