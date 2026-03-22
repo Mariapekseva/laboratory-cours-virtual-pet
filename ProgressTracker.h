@@ -1,26 +1,14 @@
-﻿#pragma once
-#include <string>
+#pragma once
 
-// Следит за прогрессом: сколько дней живёт питомец, сколько раз взаимодействовали и т.д.
-class ProgressTracker
-{
-public:
-    ProgressTracker();
-    ~ProgressTracker();
-
-    void updateStats(int petLifetime, int interactionCount, int totalPlayTime, double parameterBalance);
-    std::string generateReport(); // Создаёт отчёт
-    void trackInteraction();      // Считает взаимодействия
-
-    // Геттеры
-    int getPetLifetime() const;
-    int getInteractionCount() const;
-    int getTotalPlayTime() const;
-    double getParameterBalance() const;
-
+class ProgressTracker {
 private:
-    int petLifetime;          // Сколько дней живёт питомец
-    int interactionCount;     // Сколько раз игрок взаимодействовал
-    int totalPlayTime;        // Общее время игры (минуты)
-    double parameterBalance;  // Средний баланс параметров
+    int interactionCount = 0;
+    int xpGained = 0;
+
+public:
+    void trackInteraction();
+    void addXP(int amount);
+
+    int getInteractionCount() const { return interactionCount; }
+    int getXPGained() const { return xpGained; }
 };
